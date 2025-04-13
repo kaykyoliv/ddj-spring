@@ -74,4 +74,53 @@ import java.util.List;
         Assertions.assertThat(producers).hasSize(1).contains(expectedProducer);
     }
 
+    @Test
+    @DisplayName("save creates a producer")
+    @Order(5)
+    void save_CreatesProducer_WhenSuccessful() {
+        BDDMockito.when(producerData.getProducers()).thenReturn(producerList);
+
+        var producerToSave = Producer.builder().id(99L).name("MAPPA").createdAt(LocalDateTime.now()).build();
+        var producer = respository.save(producerToSave);
+
+        Assertions.assertThat(producer).isEqualTo(producerToSave).hasNoNullFieldsOrProperties();
+
+        var producerSavedOptional = respository.findById(producerToSave.getId());
+
+        Assertions.assertThat(producerSavedOptional).isPresent().contains(producerToSave);
+    }
+
+    @Test
+    @DisplayName("delete removes a producer")
+    @Order(6)
+    void delete_RemoveProducer_WhenSuccessful() {
+        BDDMockito.when(producerData.getProducers()).thenReturn(producerList);
+
+        var producerToDelete = producerList.getFirst();
+        respository.delete(producerToDelete);
+
+        var producers = respository.findAll();
+
+        Assertions.assertThat(producers).isNotEmpty().doesNotContain(producerToDelete);
+    }
+
+    @Test
+    @DisplayName("update updates a producer")
+    @Order(7)
+    void update_UpdatesProducer_WhenSuccessful() {
+        BDDMockito.when(producerData.getProducers()).thenReturn(producerList);
+        var producerToUpdate = this.producerList.getFirst();
+        producerToUpdate.setName("Aniplex");
+
+        respository.update(producerToUpdate);
+
+        Assertions.assertThat(this.producerList).contains(producerToUpdate);
+
+        var producerUpdatedOptional = respository.findById(producerToUpdate.getId());
+
+        Assertions.assertThat(producerUpdatedOptional).isPresent();
+        Assertions.assertThat(producerUpdatedOptional.get().getName()).isEqualTo(producerToUpdate.getName());
+    }
 }
+
+
