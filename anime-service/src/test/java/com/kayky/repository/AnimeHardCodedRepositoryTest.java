@@ -1,5 +1,6 @@
 package com.kayky.repository;
 
+import com.kayky.commons.AnimeUtils;
 import com.kayky.domain.Anime;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
@@ -20,13 +21,13 @@ import java.util.List;
      @Mock
      private AnimeData animeData;
      private List<Anime> animesList;
+
+    @InjectMocks
+    private AnimeUtils animeUtils;
  
      @BeforeEach
      void init() {
-         var fullMetal = Anime.builder().id(1L).name("Full Metal Brotherhood").build();
-         var steinsGate = Anime.builder().id(2L).name("Steins Gate").build();
-         var mashle = Anime.builder().id(3L).name("Mashle").build();
-         animesList = new ArrayList<>(List.of(fullMetal, steinsGate, mashle));
+        animesList = animeUtils.newAnimeList();
      }
  
      @Test
@@ -77,7 +78,7 @@ import java.util.List;
      void save_CreatesAnime_WhenSuccessful() {
          BDDMockito.when(animeData.getAnimes()).thenReturn(animesList);
  
-         var animeToSave = Anime.builder().id(99L).name("Pokemon").build();
+         var animeToSave = animeUtils.newAnimeToSave();
          var anime = respository.save(animeToSave);
  
          org.assertj.core.api.Assertions.assertThat(anime).isEqualTo(animeToSave).hasNoNullFieldsOrProperties();

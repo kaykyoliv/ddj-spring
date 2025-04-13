@@ -1,5 +1,6 @@
 package com.kayky.repository;
 
+import com.kayky.commons.ProducerUtils;
 import com.kayky.domain.Producer;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,14 +24,14 @@ import java.util.List;
      private ProducerHardCodedRepository respository;
      @Mock
      private ProducerData producerData;
-     private final List<Producer> producerList = new ArrayList<>();
+     private List<Producer> producerList = new ArrayList<>();
+
+     @InjectMocks
+     private ProducerUtils producerUtils;
  
      @BeforeEach
      void init(){
-         var ufotable = Producer.builder().id(1L).name("Ufotable").createdAt(LocalDateTime.now()).build();
-         var witStudio = Producer.builder().id(2L).name("Wit Studio").createdAt(LocalDateTime.now()).build();
-         var studioGhibli = Producer.builder().id(3L).name("Studio Ghibli").createdAt(LocalDateTime.now()).build();
-         producerList.addAll(List.of(ufotable, witStudio, studioGhibli));
+       producerList = producerUtils.newProducerList();
      }
  
      @Test
@@ -80,7 +82,7 @@ import java.util.List;
     void save_CreatesProducer_WhenSuccessful() {
         BDDMockito.when(producerData.getProducers()).thenReturn(producerList);
 
-        var producerToSave = Producer.builder().id(99L).name("MAPPA").createdAt(LocalDateTime.now()).build();
+        var producerToSave = producerUtils.newProducerToSave();
         var producer = respository.save(producerToSave);
 
         Assertions.assertThat(producer).isEqualTo(producerToSave).hasNoNullFieldsOrProperties();
