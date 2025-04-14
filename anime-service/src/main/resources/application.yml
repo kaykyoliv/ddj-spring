@@ -1,7 +1,26 @@
 spring:
+  profiles:
+    active: mongo
   application:
     name: anime-service
+  threads:
+    virtual:
+      enabled: true
 
+logging:
+  level:
+    com.kayky: debug
 server:
   servlet:
     context-path: /
+
+  error:
+    include-stacktrace: on_param
+  tomcat:
+    threads:
+      max: 20
+
+database:
+  url: ${DB_URL:localhost}:${DB_PORT:3306}
+  username: ${LOCAL_USERNAME:kayky}
+  password: ${LOCAL_PASSWORD:123}
