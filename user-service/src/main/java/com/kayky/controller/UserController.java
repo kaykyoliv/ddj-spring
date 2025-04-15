@@ -6,6 +6,7 @@ import com.kayky.request.UserPutRequest;
 import com.kayky.response.UserGetResponse;
 import com.kayky.response.UserPostResponse;
 import com.kayky.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserPostResponse> save(@RequestBody UserPostRequest request) {
+    public ResponseEntity<UserPostResponse> save(@RequestBody @Valid UserPostRequest request) {
         log.debug("Request to save user : {}", request);
 
         var user = mapper.toUser(request);
@@ -69,7 +70,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> update(@RequestBody UserPutRequest request) {
+    public ResponseEntity<Void> update(@RequestBody @Valid UserPutRequest request) {
         log.debug("Request to update user {}", request);
 
         var userToUpdate = mapper.toUser(request);
