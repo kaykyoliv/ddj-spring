@@ -111,12 +111,13 @@ import static org.assertj.core.api.Assertions.assertThat;
      @Order(5)
      void findById_ThrowsNotFound_WhenUserIsNotFound() throws Exception {
          BDDMockito.when(userData.getUsers()).thenReturn(userList);
+         var response = fileUtils.readResourceFile("user/get-user-by-id-404.json");
          var id = 99L;
 
          mockMvc.perform(MockMvcRequestBuilders.get(URL + "/{id}", id))
                  .andDo(MockMvcResultHandlers.print())
                  .andExpect(MockMvcResultMatchers.status().isNotFound())
-                 .andExpect(MockMvcResultMatchers.status().reason("User not Found"));
+                 .andExpect(MockMvcResultMatchers.content().json(response));
      }
 
      @Test
@@ -145,6 +146,7 @@ import static org.assertj.core.api.Assertions.assertThat;
      @Order(7)
      void delete_RemoveUser_WhenSuccessful() throws Exception {
          BDDMockito.when(userData.getUsers()).thenReturn(userList);
+
          var id = userList.getFirst().getId();
 
          mockMvc.perform(MockMvcRequestBuilders.delete(URL + "/{id}", id))
@@ -157,12 +159,13 @@ import static org.assertj.core.api.Assertions.assertThat;
      @Order(8)
      void delete_ThrowsNotFound_WhenUserIsNotFound() throws Exception {
          BDDMockito.when(userData.getUsers()).thenReturn(userList);
+         var response = fileUtils.readResourceFile("user/delete-user-by-id-404.json");
          var id = 99L;
 
          mockMvc.perform(MockMvcRequestBuilders.delete(URL + "/{id}", id))
                  .andDo(MockMvcResultHandlers.print())
                  .andExpect(MockMvcResultMatchers.status().isNotFound())
-                 .andExpect(MockMvcResultMatchers.status().reason("User not Found"));
+                 .andExpect(MockMvcResultMatchers.content().json(response));
 
      }
 
@@ -188,6 +191,7 @@ import static org.assertj.core.api.Assertions.assertThat;
      void update_ThrowsNotFound_WhenUserIsNotFound() throws Exception {
          BDDMockito.when(userData.getUsers()).thenReturn(userList);
          var request = fileUtils.readResourceFile("user/put-request-user-404.json");
+         var response = fileUtils.readResourceFile("user/put-user-by-id-404.json");
          mockMvc.perform(MockMvcRequestBuilders
                          .put(URL)
                          .content(request)
@@ -195,7 +199,7 @@ import static org.assertj.core.api.Assertions.assertThat;
                  )
                  .andDo(MockMvcResultHandlers.print())
                  .andExpect(MockMvcResultMatchers.status().isNotFound())
-                 .andExpect(MockMvcResultMatchers.status().reason("User not Found"));
+                 .andExpect(MockMvcResultMatchers.content().json(response));
      }
 
     @ParameterizedTest

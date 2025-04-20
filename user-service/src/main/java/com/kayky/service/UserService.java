@@ -4,9 +4,7 @@ import com.kayky.domain.User;
 import com.kayky.exception.NotFoundException;
 import com.kayky.repository.UserHardCodedRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -34,7 +32,11 @@ import java.util.List;
     }
 
     public void update(User userToUpdate) {
-        var user = findByIdOrThrowNotFound(userToUpdate.getId());
+        assertUserExists(userToUpdate.getId());
         repository.update(userToUpdate);
+    }
+
+    public void assertUserExists(Long id) {
+        findByIdOrThrowNotFound(id);
     }
  }
