@@ -1,6 +1,7 @@
 package com.kayky.service;
 
 import com.kayky.domain.Producer;
+import com.kayky.exception.NotFoundException;
 import com.kayky.repository.ProducerHardCodedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class ProducerService {
 
     public Producer findByIdOrThrowNotFound(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producer not Found"));
+                .orElseThrow(() -> new NotFoundException("Producer not Found"));
     }
 
     public Producer save(Producer producer) {

@@ -1,6 +1,7 @@
 package com.kayky.service;
 
 import com.kayky.domain.Anime;
+import com.kayky.exception.NotFoundException;
 import com.kayky.repository.AnimeHardCodedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class AnimeService {
 
     public Anime findByIdOrThrowNotFound(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime not Found"));
+                .orElseThrow(() -> new NotFoundException("Anime not Found"));
     }
 
     public Anime save(Anime anime) {
