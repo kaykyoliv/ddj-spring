@@ -5,6 +5,7 @@ import com.kayky.commons.UserUtils;
 import com.kayky.domain.User;
 import com.kayky.repository.UserData;
 import com.kayky.repository.UserHardCodedRepository;
+import com.kayky.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -40,6 +41,8 @@ import static org.assertj.core.api.Assertions.assertThat;
      private UserData userData;
      @MockitoSpyBean
      private UserHardCodedRepository repository;
+     @MockitoBean
+     private UserRepository userRepository;
      private List<User> userList;
      @Autowired
      private FileUtils fileUtils;
@@ -55,7 +58,7 @@ import static org.assertj.core.api.Assertions.assertThat;
      @DisplayName("GET v1/users returns a list with all users when argument is null")
      @Order(1)
      void findAll_ReturnsAllUsers_WhenArgumentIsNull() throws Exception {
-         BDDMockito.when(userData.getUsers()).thenReturn(userList);
+         BDDMockito.when(userRepository.findAll()).thenReturn(userList);
          var response = fileUtils.readResourceFile("user/get-user-null-first-name-200.json");
  
          mockMvc.perform(MockMvcRequestBuilders.get(URL))

@@ -3,6 +3,7 @@ package com.kayky.service;
 import com.kayky.commons.UserUtils;
 import com.kayky.domain.User;
 import com.kayky.repository.UserHardCodedRepository;
+import com.kayky.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,9 @@ import static java.util.Collections.singletonList;
      private UserService service;
      @Mock
      private UserHardCodedRepository repository;
+
+     @Mock
+     private UserRepository userRepository;
      private List<User> userList;
      @InjectMocks
      private UserUtils userUtils;
@@ -39,7 +43,7 @@ import static java.util.Collections.singletonList;
      @DisplayName("findAll returns a list with all users when argument is null")
      @Order(1)
      void findAll_ReturnsAllUsers_WhenArgumentIsNull() {
-         BDDMockito.when(repository.findAll()).thenReturn(userList);
+         BDDMockito.when(userRepository.findAll()).thenReturn(userList);
  
          var users = service.findAll(null);
          org.assertj.core.api.Assertions.assertThat(users).isNotNull().hasSameElementsAs(userList);

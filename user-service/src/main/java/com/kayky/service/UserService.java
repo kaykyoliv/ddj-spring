@@ -3,6 +3,7 @@ package com.kayky.service;
 import com.kayky.domain.User;
 import com.kayky.exception.NotFoundException;
 import com.kayky.repository.UserHardCodedRepository;
+import com.kayky.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,10 @@ import java.util.List;
  @RequiredArgsConstructor
  public class UserService {
      private final UserHardCodedRepository repository;
- 
+     private final UserRepository userRepository;
+
      public List<User> findAll(String firstName) {
-         return firstName == null ? repository.findAll() : repository.findByFirstName(firstName);
+         return firstName == null ? userRepository.findAll() : repository.findByFirstName(firstName);
      }
 
     public User findByIdOrThrowNotFound(Long id) {
