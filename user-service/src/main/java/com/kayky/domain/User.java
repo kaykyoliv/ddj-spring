@@ -1,6 +1,5 @@
 package com.kayky.domain;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 

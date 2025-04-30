@@ -2,7 +2,6 @@ package com.kayky.service;
 
 import com.kayky.domain.User;
 import com.kayky.exception.NotFoundException;
-import com.kayky.repository.UserHardCodedRepository;
 import com.kayky.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,11 +11,11 @@ import java.util.List;
 @Service
  @RequiredArgsConstructor
  public class UserService {
-     private final UserHardCodedRepository repository;
-     private final UserRepository userRepository;
+
+     private final UserRepository repository;
 
      public List<User> findAll(String firstName) {
-         return firstName == null ? userRepository.findAll() : repository.findByFirstName(firstName);
+         return firstName == null ? repository.findAll() : repository.findByFirstNameIgnoreCase(firstName);
      }
 
     public User findByIdOrThrowNotFound(Long id) {
@@ -35,10 +34,10 @@ import java.util.List;
 
     public void update(User userToUpdate) {
         assertUserExists(userToUpdate.getId());
-        repository.update(userToUpdate);
+        repository.save(userToUpdate);
     }
 
-    public void assertUserExists(Long id) {
+    public void assertUserExists(Long   id) {
         findByIdOrThrowNotFound(id);
     }
  }

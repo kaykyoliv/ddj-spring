@@ -15,13 +15,13 @@ spring:
     virtual:
       enabled: true
 
-  logging:
-    level:
-      com.kayky: debug
-  server:
-    port: 8090
-    servlet:
-      context-path: /
+logging:
+  level:
+    com.kayky: debug
+server:
+  port: 8091
+  servlet:
+    context-path: /
 
     error:
       include-stacktrace: on_param

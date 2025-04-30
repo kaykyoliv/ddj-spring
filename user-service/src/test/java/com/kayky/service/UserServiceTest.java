@@ -2,7 +2,6 @@ package com.kayky.service;
 
 import com.kayky.commons.UserUtils;
 import com.kayky.domain.User;
-import com.kayky.repository.UserHardCodedRepository;
 import com.kayky.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
@@ -26,10 +25,7 @@ import static java.util.Collections.singletonList;
      @InjectMocks
      private UserService service;
      @Mock
-     private UserHardCodedRepository repository;
-
-     @Mock
-     private UserRepository userRepository;
+     private UserRepository repository;
      private List<User> userList;
      @InjectMocks
      private UserUtils userUtils;
@@ -43,7 +39,7 @@ import static java.util.Collections.singletonList;
      @DisplayName("findAll returns a list with all users when argument is null")
      @Order(1)
      void findAll_ReturnsAllUsers_WhenArgumentIsNull() {
-         BDDMockito.when(userRepository.findAll()).thenReturn(userList);
+         BDDMockito.when(repository.findAll()).thenReturn(userList);
  
          var users = service.findAll(null);
          org.assertj.core.api.Assertions.assertThat(users).isNotNull().hasSameElementsAs(userList);
@@ -56,7 +52,7 @@ import static java.util.Collections.singletonList;
          var user = userList.getFirst();
          var expectedUsersFound = singletonList(user);
  
-         BDDMockito.when(repository.findByFirstName(user.getFirstName())).thenReturn(expectedUsersFound);
+         BDDMockito.when(repository.findByFirstNameIgnoreCase(user.getFirstName())).thenReturn(expectedUsersFound);
  
          var usersFound = service.findAll(user.getFirstName());
          org.assertj.core.api.Assertions.assertThat(usersFound).containsAll(expectedUsersFound);
@@ -67,7 +63,7 @@ import static java.util.Collections.singletonList;
      @Order(3)
      void findByName_ReturnsEmptyList_WhenFirstNameIsNotFound() {
          var firstName = "not-found";
-         BDDMockito.when(repository.findByFirstName(firstName)).thenReturn(emptyList());
+         BDDMockito.when(repository.findByFirstNameIgnoreCase(firstName)).thenReturn(emptyList());
  
          var users = service.findAll(firstName);
          Assertions.assertThat(users).isNotNull().isEmpty();
@@ -141,7 +137,7 @@ import static java.util.Collections.singletonList;
         userToUpdate.setFirstName("Inuyasha");
 
         BDDMockito.when(repository.findById(userToUpdate.getId())).thenReturn(Optional.of(userToUpdate));
-        BDDMockito.doNothing().when(repository).update(userToUpdate);
+        BDDMockito.when(repository.save(userToUpdate)).thenReturn(userToUpdate);
 
         Assertions.assertThatNoException().isThrownBy(() -> service.update(userToUpdate));
     }
