@@ -13,7 +13,7 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
-    @Mapping(target = "id", ignore = true)
+
     User toUser(UserPostRequest postRequest);
 
     User toUser(UserPutRequest request);

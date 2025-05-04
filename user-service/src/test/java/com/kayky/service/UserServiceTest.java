@@ -2,6 +2,7 @@ package com.kayky.service;
 
 import com.kayky.commons.UserUtils;
 import com.kayky.domain.User;
+import com.kayky.exception.EmailAlreadyExistsException;
 import com.kayky.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
@@ -20,54 +21,54 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 @ExtendWith(MockitoExtension.class)
- @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
- class UserServiceTest {
-     @InjectMocks
-     private UserService service;
-     @Mock
-     private UserRepository repository;
-     private List<User> userList;
-     @InjectMocks
-     private UserUtils userUtils;
- 
-     @BeforeEach
-     void init() {
-         userList = userUtils.newUserList();
-     }
- 
-     @Test
-     @DisplayName("findAll returns a list with all users when argument is null")
-     @Order(1)
-     void findAll_ReturnsAllUsers_WhenArgumentIsNull() {
-         BDDMockito.when(repository.findAll()).thenReturn(userList);
- 
-         var users = service.findAll(null);
-         org.assertj.core.api.Assertions.assertThat(users).isNotNull().hasSameElementsAs(userList);
-     }
- 
-     @Test
-     @DisplayName("findAll returns list with found object when firstName exists")
-     @Order(2)
-     void findByName_ReturnsFoundUserInList_WhenFirstNameIsFound() {
-         var user = userList.getFirst();
-         var expectedUsersFound = singletonList(user);
- 
-         BDDMockito.when(repository.findByFirstNameIgnoreCase(user.getFirstName())).thenReturn(expectedUsersFound);
- 
-         var usersFound = service.findAll(user.getFirstName());
-         org.assertj.core.api.Assertions.assertThat(usersFound).containsAll(expectedUsersFound);
-     }
- 
-     @Test
-     @DisplayName("findAll returns empty list when firstName is not found")
-     @Order(3)
-     void findByName_ReturnsEmptyList_WhenFirstNameIsNotFound() {
-         var firstName = "not-found";
-         BDDMockito.when(repository.findByFirstNameIgnoreCase(firstName)).thenReturn(emptyList());
- 
-         var users = service.findAll(firstName);
-         Assertions.assertThat(users).isNotNull().isEmpty();
-     }
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class UserServiceTest {
+    @InjectMocks
+    private UserService service;
+    @Mock
+    private UserRepository repository;
+    private List<User> userList;
+    @InjectMocks
+    private UserUtils userUtils;
+
+    @BeforeEach
+    void init() {
+        userList = userUtils.newUserList();
+    }
+
+    @Test
+    @DisplayName("findAll returns a list with all users when argument is null")
+    @Order(1)
+    void findAll_ReturnsAllUsers_WhenArgumentIsNull() {
+        BDDMockito.when(repository.findAll()).thenReturn(userList);
+
+        var users = service.findAll(null);
+        org.assertj.core.api.Assertions.assertThat(users).isNotNull().hasSameElementsAs(userList);
+    }
+
+    @Test
+    @DisplayName("findAll returns list with found object when firstName exists")
+    @Order(2)
+    void findByName_ReturnsFoundUserInList_WhenFirstNameIsFound() {
+        var user = userList.getFirst();
+        var expectedUsersFound = singletonList(user);
+
+        BDDMockito.when(repository.findByFirstNameIgnoreCase(user.getFirstName())).thenReturn(expectedUsersFound);
+
+        var usersFound = service.findAll(user.getFirstName());
+        org.assertj.core.api.Assertions.assertThat(usersFound).containsAll(expectedUsersFound);
+    }
+
+    @Test
+    @DisplayName("findAll returns empty list when firstName is not found")
+    @Order(3)
+    void findByName_ReturnsEmptyList_WhenFirstNameIsNotFound() {
+        var firstName = "not-found";
+        BDDMockito.when(repository.findByFirstNameIgnoreCase(firstName)).thenReturn(emptyList());
+
+        var users = service.findAll(firstName);
+        Assertions.assertThat(users).isNotNull().isEmpty();
+    }
 
     @Test
     @DisplayName("findById returns an user with given id")
@@ -100,6 +101,7 @@ import static java.util.Collections.singletonList;
         var userToSave = userUtils.newUserToSave();
 
         BDDMockito.when(repository.save(userToSave)).thenReturn(userToSave);
+        BDDMockito.when(repository.findByEmail(userToSave.getEmail())).thenReturn(Optional.empty());
 
         var savedUser = service.save(userToSave);
 
@@ -136,7 +138,11 @@ import static java.util.Collections.singletonList;
         var userToUpdate = userList.getFirst();
         userToUpdate.setFirstName("Inuyasha");
 
+        var id = userToUpdate.getId();
+        var email = userToUpdate.getEmail();
+
         BDDMockito.when(repository.findById(userToUpdate.getId())).thenReturn(Optional.of(userToUpdate));
+        BDDMockito.when(repository.findByEmailAndIdNot(email, id)).thenReturn(Optional.empty());
         BDDMockito.when(repository.save(userToUpdate)).thenReturn(userToUpdate);
 
         Assertions.assertThatNoException().isThrownBy(() -> service.update(userToUpdate));
@@ -154,4 +160,38 @@ import static java.util.Collections.singletonList;
                 .isThrownBy(() -> service.update(userToUpdate))
                 .isInstanceOf(ResponseStatusException.class);
     }
- }
+
+    @Test
+    @DisplayName("update throws EmailAlreadyExistsException when email belongs to another user")
+    @Order(11)
+    void update_ThrowsEmailAlreadyExistsException_WhenEmailBelongToAnotherUser() {
+
+        var savedUser = userList.getLast();
+        var userToUpdate = userList.getFirst().withEmail(savedUser.getEmail());
+
+        var id = userToUpdate.getId();
+        var email = userToUpdate.getEmail();
+
+        BDDMockito.when(repository.findById(userToUpdate.getId())).thenReturn(Optional.of(userToUpdate));
+        BDDMockito.when(repository.findByEmailAndIdNot(email, id)).thenReturn(Optional.of(savedUser));
+
+        Assertions.assertThatException()
+                .isThrownBy(() -> service.update(userToUpdate))
+                .isInstanceOf(EmailAlreadyExistsException.class);
+    }
+
+    @Test
+    @DisplayName("save throws EmailAlreadyExistsException when exists")
+    @Order(12)
+    void save_ThrowsEmailAlreadyExistsException_WhenEmailExists() {
+        var savedUser = userList.getLast();
+        var userToSave = userUtils.newUserToSave().withEmail(savedUser.getEmail());
+        var email = userToSave.getEmail();
+
+        BDDMockito.when(repository.findByEmail(email)).thenReturn(Optional.of(savedUser));
+
+        Assertions.assertThatException()
+                .isThrownBy(() -> service.save(userToSave))
+                .isInstanceOf(EmailAlreadyExistsException.class);
+    }
+}
