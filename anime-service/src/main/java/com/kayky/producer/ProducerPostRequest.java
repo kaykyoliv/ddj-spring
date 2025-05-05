@@ -1,4 +1,4 @@
-package com.kayky.request;
+package com.kayky.producer;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

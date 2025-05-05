@@ -1,4 +1,4 @@
-package com.kayky.response;
+package com.kayky.anime;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
-public class ProducerPostResponse {
+public class AnimePostResponse {
     private Long id;
     private String name;
 }

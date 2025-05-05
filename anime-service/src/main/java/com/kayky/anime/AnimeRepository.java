@@ -1,4 +1,4 @@
-package com.kayky.repository;
+package com.kayky.anime;
 
 import com.kayky.domain.Anime;
 import org.springframework.data.jpa.repository.JpaRepository;

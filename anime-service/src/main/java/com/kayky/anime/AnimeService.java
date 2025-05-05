@@ -1,13 +1,10 @@
-package com.kayky.service;
+package com.kayky.anime;
 
 import com.kayky.domain.Anime;
 import com.kayky.exception.NotFoundException;
-import com.kayky.repository.AnimeHardCodedRepository;
-import com.kayky.repository.AnimeRepository;
+import com.kayky.anime.AnimeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 

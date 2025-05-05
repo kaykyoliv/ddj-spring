@@ -1,8 +1,9 @@
-package com.kayky.service;
+package com.kayky.producer;
 
 import com.kayky.commons.ProducerUtils;
 import com.kayky.domain.Producer;
-import com.kayky.repository.ProducerHardCodedRepository;
+import com.kayky.producer.ProducerHardCodedRepository;
+import com.kayky.producer.ProducerService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,11 +12,8 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

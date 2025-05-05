@@ -1,12 +1,7 @@
-package com.kayky.mapper;
+package com.kayky.anime;
 
 import com.kayky.domain.Anime;
-import com.kayky.request.AnimePostRequest;
-import com.kayky.request.AnimePutRequest;
-import com.kayky.response.AnimeGetResponse;
-import com.kayky.response.AnimePostResponse;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
 import java.util.List;

@@ -1,10 +1,6 @@
-package com.kayky.mapper;
+package com.kayky.producer;
 
 import com.kayky.domain.Producer;
-import com.kayky.request.ProducerPostRequest;
-import com.kayky.request.ProducerPutRequest;
-import com.kayky.response.ProducerGetResponse;
-import com.kayky.response.ProducerPostResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

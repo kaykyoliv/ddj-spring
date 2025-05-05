@@ -1,12 +1,11 @@
-package com.kayky.controller;
+package com.kayky.producer;
 
 import com.kayky.commons.FileUtils;
 import com.kayky.commons.ProducerUtils;
 import com.kayky.domain.Producer;
-import com.kayky.mapper.ProducerMapperImpl;
-import com.kayky.repository.ProducerData;
-import com.kayky.repository.ProducerHardCodedRepository;
-import com.kayky.service.ProducerService;
+import com.kayky.producer.ProducerController;
+import com.kayky.producer.ProducerData;
+import com.kayky.producer.ProducerHardCodedRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -16,7 +15,6 @@ import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -26,7 +24,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -36,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @WebMvcTest(controllers = ProducerController.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //@Import({ProducerMapperImpl.class, ProducerService.class, ProducerHardCodedRepository.class, ProducerData.class})
-@ComponentScan(basePackages = "com.kayky")
+@ComponentScan(basePackages = {"com.kayky.producer", "com.kayky.commons"})
 class ProducerControllerTest {
 
     private static final String URL = "/v1/producers";

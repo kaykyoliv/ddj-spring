@@ -1,4 +1,4 @@
-package com.kayky.response;
+package com.kayky.anime;
 
 import lombok.Builder;
 import lombok.Getter;

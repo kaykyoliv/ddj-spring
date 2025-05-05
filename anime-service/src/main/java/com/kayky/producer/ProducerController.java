@@ -1,11 +1,5 @@
-package com.kayky.controller;
+package com.kayky.producer;
 
-import com.kayky.mapper.ProducerMapper;
-import com.kayky.request.ProducerPostRequest;
-import com.kayky.request.ProducerPutRequest;
-import com.kayky.response.ProducerGetResponse;
-import com.kayky.response.ProducerPostResponse;
-import com.kayky.service.ProducerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

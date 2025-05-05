@@ -1,12 +1,10 @@
-package com.kayky.service;
+package com.kayky.producer;
 
 import com.kayky.domain.Producer;
 import com.kayky.exception.NotFoundException;
-import com.kayky.repository.ProducerHardCodedRepository;
+import com.kayky.producer.ProducerHardCodedRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 

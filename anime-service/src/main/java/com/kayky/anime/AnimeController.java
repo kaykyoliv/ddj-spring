@@ -1,11 +1,6 @@
-package com.kayky.controller;
+package com.kayky.anime;
 
-import com.kayky.mapper.AnimeMapper;
-import com.kayky.request.AnimePostRequest;
-import com.kayky.request.AnimePutRequest;
-import com.kayky.response.AnimeGetResponse;
-import com.kayky.response.AnimePostResponse;
-import com.kayky.service.AnimeService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

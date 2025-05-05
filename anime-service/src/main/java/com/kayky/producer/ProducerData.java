@@ -1,4 +1,4 @@
-package com.kayky.repository;
+package com.kayky.producer;
 
 import com.kayky.domain.Producer;
 import org.springframework.stereotype.Component;

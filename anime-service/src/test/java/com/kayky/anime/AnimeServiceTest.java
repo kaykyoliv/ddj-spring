@@ -1,8 +1,9 @@
-package com.kayky.service;
+package com.kayky.anime;
 
+import com.kayky.anime.AnimeService;
 import com.kayky.commons.AnimeUtils;
 import com.kayky.domain.Anime;
-import com.kayky.repository.AnimeHardCodedRepository;
+import com.kayky.anime.AnimeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ import static java.util.Collections.emptyList;
      @InjectMocks
      private AnimeService service;
      @Mock
-     private AnimeHardCodedRepository repository;
+     private AnimeRepository repository;
      private List<Anime> animesList;
 
      @InjectMocks
@@ -139,7 +139,7 @@ import static java.util.Collections.emptyList;
          animeToUpdate.setName("Grand Blue");
  
          BDDMockito.when(repository.findById(animeToUpdate.getId())).thenReturn(Optional.of(animeToUpdate));
-         BDDMockito.doNothing().when(repository).update(animeToUpdate);
+         BDDMockito.when(repository.save(animeToUpdate)).thenReturn(animeToUpdate);
  
          org.assertj.core.api.Assertions.assertThatNoException().isThrownBy(() -> service.update(animeToUpdate));
      }
