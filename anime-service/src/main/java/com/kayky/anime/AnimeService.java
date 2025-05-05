@@ -34,7 +34,6 @@ public class AnimeService {
 
     public void update(Anime animeToUpdate) {
         assertAnimeExists(animeToUpdate.getId());
-
         repository.save(animeToUpdate);
     }
 
