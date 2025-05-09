@@ -10,7 +10,7 @@ import lombok.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "anime")
+@ToString
 public class Anime {
 
     @EqualsAndHashCode.Include
