@@ -4,6 +4,8 @@ import com.kayky.domain.Anime;
 import com.kayky.exception.NotFoundException;
 import com.kayky.anime.AnimeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,10 +20,15 @@ public class AnimeService {
         return name == null ? repository.findAll() : repository.findByName(name);
     }
 
+    public Page<Anime> findAllPaginated(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
     public Anime findByIdOrThrowNotFound(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Anime not Found"));
     }
+
 
     public Anime save(Anime anime) {
         return repository.save(anime);
