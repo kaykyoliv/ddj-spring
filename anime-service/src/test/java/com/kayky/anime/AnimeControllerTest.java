@@ -33,8 +33,6 @@ class AnimeControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockitoBean
-    private AnimeData animeData;
-    @MockitoBean
     private AnimeRepository repository;
     private List<Anime> animesList;
     @Autowired

@@ -2,8 +2,6 @@ package com.kayky.producer;
 
 import com.kayky.commons.ProducerUtils;
 import com.kayky.domain.Producer;
-import com.kayky.producer.ProducerHardCodedRepository;
-import com.kayky.producer.ProducerService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +24,7 @@ class ProducerServiceTest {
     @InjectMocks
     private ProducerService service;
     @Mock
-    private ProducerHardCodedRepository repository;
+    private ProducerRepository repository;
     private List<Producer> producerList;
 
     @InjectMocks
@@ -139,7 +137,7 @@ class ProducerServiceTest {
         producerToUpdate.setName("Aniplex");
 
         BDDMockito.when(repository.findById(producerToUpdate.getId())).thenReturn(Optional.of(producerToUpdate));
-        BDDMockito.doNothing().when(repository).update(producerToUpdate);
+        BDDMockito.when(repository.save(producerToUpdate)).thenReturn(producerToUpdate);
 
         Assertions.assertThatNoException().isThrownBy(() -> service.update(producerToUpdate));
     }

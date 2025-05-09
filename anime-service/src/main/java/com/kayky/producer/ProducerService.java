@@ -2,7 +2,6 @@ package com.kayky.producer;
 
 import com.kayky.domain.Producer;
 import com.kayky.exception.NotFoundException;
-import com.kayky.producer.ProducerHardCodedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
