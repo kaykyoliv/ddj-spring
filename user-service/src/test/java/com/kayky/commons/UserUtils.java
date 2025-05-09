@@ -19,7 +19,6 @@ import java.util.List;
  
      public User newUserToSave() {
          return User.builder()
-                 .id(99L)
                  .firstName("Yusuke")
                  .lastName("Urameshi")
                  .email("yusuke@yuyuhakusho.com")
