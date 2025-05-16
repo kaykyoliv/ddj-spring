@@ -24,4 +24,13 @@ import java.util.List;
                  .email("yusuke@yuyuhakusho.com")
                  .build();
      }
+
+    public User newUserSaved() {
+        return User.builder()
+                .id(99L)
+                .firstName("Yusuke")
+                .lastName("Urameshi")
+                .email("yusuke@yuyuhakusho.com")
+                .build();
+    }
  }

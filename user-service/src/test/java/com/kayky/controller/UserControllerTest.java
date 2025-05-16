@@ -3,6 +3,8 @@ package com.kayky.controller;
 import com.kayky.commons.FileUtils;
 import com.kayky.commons.UserUtils;
 import com.kayky.domain.User;
+import com.kayky.repository.ProfileRepository;
+import com.kayky.repository.UserProfileRepository;
 import com.kayky.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,6 +39,10 @@ class UserControllerTest {
 
     @MockitoBean
     private UserRepository repository;
+    @MockitoBean
+    private ProfileRepository profileRepository;
+    @MockitoBean
+    private UserProfileRepository userProfileRepository;
     private List<User> userList;
     @Autowired
     private FileUtils fileUtils;
@@ -126,9 +132,9 @@ class UserControllerTest {
     void save_CreatesUser_WhenSuccessful() throws Exception {
         var request = fileUtils.readResourceFile("user/post-request-user-200.json");
         var response = fileUtils.readResourceFile("user/post-response-user-201.json");
-        var userToSave = userUtils.newUserToSave();
+        var newUserSaved = userUtils.newUserSaved();
 
-        BDDMockito.when(repository.save(ArgumentMatchers.any())).thenReturn(userToSave);
+        BDDMockito.when(repository.save(ArgumentMatchers.any())).thenReturn(newUserSaved);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post(URL)

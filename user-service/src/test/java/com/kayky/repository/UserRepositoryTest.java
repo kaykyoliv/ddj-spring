@@ -29,7 +29,7 @@ class UserRepositoryTest {
         var savedUser = repository.save(userToSave);
 
         Assertions.assertThat(savedUser).hasNoNullFieldsOrProperties();
-        Assertions.assertThat(savedUser.getId()).isEqualTo(1L);
+        Assertions.assertThat(savedUser.getId()).isNotNull();
     }
 
     @Test

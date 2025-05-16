@@ -4,6 +4,7 @@ import com.kayky.commons.FileUtils;
 import com.kayky.commons.ProfileUtils;
 import com.kayky.domain.Profile;
 import com.kayky.repository.ProfileRepository;
+import com.kayky.repository.UserProfileRepository;
 import com.kayky.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
@@ -41,6 +42,9 @@ class ProfileControllerTest {
 
     @MockitoBean
     private UserRepository userRepository;
+
+    @MockitoBean
+    private UserProfileRepository userProfileRepository;
 
     private List<Profile> profileList;
 
