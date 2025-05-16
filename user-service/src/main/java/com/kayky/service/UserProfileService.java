@@ -1,5 +1,6 @@
 package com.kayky.service;
 
+import com.kayky.domain.User;
 import com.kayky.domain.UserProfile;
 import com.kayky.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,10 @@ public class UserProfileService {
 
     public List<UserProfile> findAll() {
         return repository.findAll();
+    }
+
+    public List<User> findAllUserByProfileId(Long id){
+        return repository.findAllUserByProfileId(id);
     }
 
 }

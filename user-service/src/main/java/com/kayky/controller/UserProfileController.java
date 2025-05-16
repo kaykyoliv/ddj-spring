@@ -1,13 +1,14 @@
 package com.kayky.controller;
 
-import com.kayky.domain.UserProfile;
 import com.kayky.mapper.UserProfileMapper;
 import com.kayky.response.UserProfileGetResponse;
+import com.kayky.response.UserProfileUserGetResponse;
 import com.kayky.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,5 +30,15 @@ public class UserProfileController {
         var userProfileGetResponse = mapper.toUserProfileGetResponse(userProfiles);
 
         return ResponseEntity.ok(userProfileGetResponse);
+    }
+
+    @GetMapping("profiles/{id}/users")
+    public ResponseEntity<List<UserProfileUserGetResponse>> findAll(@PathVariable Long id) {
+        log.debug("Request received to list all user by profile id '{}'", id);
+
+        var users =  service.findAllUserByProfileId(id);
+        var userProfileGetResponseList = mapper.toUserProfileGetResponseList(users);
+
+        return ResponseEntity.ok(userProfileGetResponseList);
     }
 }
