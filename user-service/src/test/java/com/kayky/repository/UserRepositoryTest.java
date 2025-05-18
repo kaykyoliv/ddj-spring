@@ -1,6 +1,7 @@
 package com.kayky.repository;
 
 import com.kayky.commons.UserUtils;
+import com.kayky.config.IntegrationTestConfig;
 import com.kayky.config.TestcontainersConfiguration;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
@@ -12,9 +13,9 @@ import org.springframework.test.context.jdbc.Sql;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import({UserUtils.class, TestcontainersConfiguration.class})
+@Import({UserUtils.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class UserRepositoryTest {
+class UserRepositoryTest extends IntegrationTestConfig {
 
     @Autowired
     private UserRepository repository;

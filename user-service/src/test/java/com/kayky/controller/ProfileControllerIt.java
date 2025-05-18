@@ -1,6 +1,7 @@
 package com.kayky.controller;
 
 import com.kayky.commons.FileUtils;
+import com.kayky.config.IntegrationTestConfig;
 import com.kayky.config.TestcontainersConfiguration;
 import com.kayky.response.ProfileGetResponse;
 import com.kayky.response.ProfilePostResponse;
@@ -28,8 +29,7 @@ import static org.springframework.http.HttpMethod.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
-@Import(TestcontainersConfiguration.class)
-class ProfileControllerIt {
+class ProfileControllerIt extends IntegrationTestConfig {
 
     private static final String URL = "/v1/profiles";
 
