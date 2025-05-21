@@ -2,12 +2,10 @@ package com.kayky.controller;
 
 import com.kayky.commons.FileUtils;
 import com.kayky.config.IntegrationTestConfig;
-import com.kayky.config.TestcontainersConfiguration;
 import com.kayky.response.ProfileGetResponse;
 import com.kayky.response.ProfilePostResponse;
-import jakarta.transaction.Transactional;
 import net.javacrumbs.jsonunit.assertj.JsonAssertions;
-import org.assertj.core.api.Assertions;
+import net.javacrumbs.jsonunit.core.Option;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,7 +13,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.jdbc.Sql;
@@ -40,8 +37,8 @@ class ProfileControllerIt extends IntegrationTestConfig {
 
     @Test
     @DisplayName("GET v1/profiles returns a list with all profiles")
-    @Sql(value = "/sql/init_two_profiles.sql", executionPhase =  Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(value = "/sql/clean_profiles.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(value = "/sql/profile/init_two_profiles.sql", executionPhase =  Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(value = "/sql/profile/clean_profiles.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Order(1)
     void findAll_ReturnsAllProfiles_WhenSuccessful() throws Exception {
         var typeReference = new ParameterizedTypeReference<List<ProfileGetResponse>>() {
@@ -107,7 +104,9 @@ class ProfileControllerIt extends IntegrationTestConfig {
         assertThat(responseEntity).isNotNull();
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
-        JsonAssertions.assertThatJson(responseEntity.getBody()).whenIgnoringPaths("timestamp")
+        JsonAssertions.assertThatJson(responseEntity.getBody())
+                .whenIgnoringPaths("timestamp")
+                .when(Option.IGNORING_ARRAY_ORDER)
                 .isEqualTo(expectedResponse);
 
     }
