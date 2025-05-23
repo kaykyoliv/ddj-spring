@@ -25,7 +25,7 @@ import static org.springframework.http.HttpMethod.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ProfileControllerIt extends IntegrationTestConfig {
+class ProfileControllerIT extends IntegrationTestConfig {
 
     private static final String URL = "/v1/profiles";
 

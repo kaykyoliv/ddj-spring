@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ProfileControllerRestAssuredIt extends IntegrationTestConfig {
+class ProfileControllerRestAssuredIT extends IntegrationTestConfig {
 
     private static final String URL = "/v1/profiles";
 
