@@ -20,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,11 +30,13 @@ import java.util.List;
 @RequestMapping("v1/users")
 @Slf4j
 @RequiredArgsConstructor
+@EnableWebSecurity
 @Tag(name = "User API", description = "User related endpoints")
 public class UserController {
     private final UserService service;
     private final UserMapper mapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Get all users", description = "Get all users available in the system",
             responses = {

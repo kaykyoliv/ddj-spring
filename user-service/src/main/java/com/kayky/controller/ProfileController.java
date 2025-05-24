@@ -5,6 +5,7 @@ import com.kayky.request.ProfilePostRequest;
 import com.kayky.response.ProfileGetResponse;
 import com.kayky.response.ProfilePostResponse;
 import com.kayky.service.ProfileService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequestMapping("v1/profiles")
 @Slf4j
 @RequiredArgsConstructor
+@SecurityRequirement(name = "basicAuth")
 public class ProfileController {
     private final ProfileService service;
     private final ProfileMapper mapper;

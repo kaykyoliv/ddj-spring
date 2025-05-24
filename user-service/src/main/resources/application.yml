@@ -18,6 +18,7 @@ spring:
 logging:
   level:
     com.kayky: debug
+    org.springframework.security: debug
 server:
   port: 8091
   servlet:
