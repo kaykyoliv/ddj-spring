@@ -3,6 +3,7 @@ package com.kayky.service;
 import com.kayky.domain.User;
 import com.kayky.exception.EmailAlreadyExistsException;
 import com.kayky.exception.NotFoundException;
+import com.kayky.mapper.UserMapper;
 import com.kayky.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class UserService {
 
     private final UserRepository repository;
+
+    private final UserMapper mapper;
 
     public List<User> findAll(String firstName) {
         return firstName == null ? repository.findAll() : repository.findByFirstNameIgnoreCase(firstName);
@@ -39,9 +42,11 @@ public class UserService {
     }
 
     public void update(User userToUpdate) {
-        assertUserExists(userToUpdate.getId());
         assertEmailDoesNotExist(userToUpdate.getEmail(), userToUpdate.getId());
-        repository.save(userToUpdate);
+        var savedUser = findByIdOrThrowNotFound(userToUpdate.getId());
+
+        var userWithPasswordAndRoles = mapper.toUserWithPasswordAndRoles(userToUpdate, userToUpdate.getPassword(),  savedUser);
+        repository.save(userWithPasswordAndRoles);
     }
 
     public void assertUserExists(Long id) {
