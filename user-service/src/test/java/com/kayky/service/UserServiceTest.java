@@ -3,11 +3,11 @@ package com.kayky.service;
 import com.kayky.commons.UserUtils;
 import com.kayky.domain.User;
 import com.kayky.exception.EmailAlreadyExistsException;
+import com.kayky.mapper.UserMapper;
 import com.kayky.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,6 +19,8 @@ import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -30,6 +32,9 @@ class UserServiceTest {
     private List<User> userList;
     @InjectMocks
     private UserUtils userUtils;
+
+    @Mock
+    private UserMapper userMapper;
 
     @BeforeEach
     void init() {
@@ -144,6 +149,7 @@ class UserServiceTest {
         BDDMockito.when(repository.findById(userToUpdate.getId())).thenReturn(Optional.of(userToUpdate));
         BDDMockito.when(repository.findByEmailAndIdNot(email, id)).thenReturn(Optional.empty());
         BDDMockito.when(repository.save(userToUpdate)).thenReturn(userToUpdate);
+        BDDMockito.when(userMapper.toUserWithPasswordAndRoles(any(), any(), any())).thenReturn(userToUpdate);
 
         Assertions.assertThatNoException().isThrownBy(() -> service.update(userToUpdate));
     }
@@ -154,7 +160,7 @@ class UserServiceTest {
     void update_ThrowsResponseStatusException_WhenUserIsNotFound() {
         var userToUpdate = userList.getFirst();
 
-        BDDMockito.when(repository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.empty());
+        BDDMockito.when(repository.findById(anyLong())).thenReturn(Optional.empty());
 
         Assertions.assertThatException()
                 .isThrownBy(() -> service.update(userToUpdate))

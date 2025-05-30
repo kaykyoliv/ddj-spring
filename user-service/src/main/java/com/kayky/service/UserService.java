@@ -42,8 +42,8 @@ public class UserService {
     }
 
     public void update(User userToUpdate) {
-        assertEmailDoesNotExist(userToUpdate.getEmail(), userToUpdate.getId());
         var savedUser = findByIdOrThrowNotFound(userToUpdate.getId());
+        assertEmailDoesNotExist(userToUpdate.getEmail(), userToUpdate.getId());
 
         var userWithPasswordAndRoles = mapper.toUserWithPasswordAndRoles(userToUpdate, userToUpdate.getPassword(),  savedUser);
         repository.save(userWithPasswordAndRoles);

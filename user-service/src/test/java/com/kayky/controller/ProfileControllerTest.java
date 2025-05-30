@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -30,6 +31,7 @@ import java.util.stream.Stream;
 @WebMvcTest(controllers = ProfileController.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ComponentScan(basePackages = "com.kayky")
+@WithMockUser
 class ProfileControllerTest {
 
     private static final String URL = "/v1/profiles";
@@ -62,6 +64,7 @@ class ProfileControllerTest {
     @Test
     @DisplayName("GET v1/profiles returns a list with all profiles")
     @Order(1)
+    @WithMockUser(authorities = "ADMIN")
     void findAll_ReturnsAllProfiles_WhenSuccessful() throws Exception {
         BDDMockito.when(repository.findAll()).thenReturn(profileList);
         var response = fileUtils.readResourceFile("profile/get-profiles-200.json");

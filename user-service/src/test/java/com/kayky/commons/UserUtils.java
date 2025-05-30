@@ -10,9 +10,28 @@ import java.util.List;
  public class UserUtils {
  
      public List<User> newUserList() {
-         var toyohisa = User.builder().id(1L).firstName("Toyohisa").lastName("Shimazu").email("toyohisa@drifters.com").build();
-         var ichigo = User.builder().id(2L).firstName("Ichigo").lastName("Kurosaki").email("ichigo@bleach.com").build();
-         var ash = User.builder().id(3L).firstName("Ash").lastName("Ketchum").email("ash@pokemon.com").build();
+         var toyohisa = User.builder()
+                 .id(1L)
+                 .firstName("Toyohisa")
+                 .lastName("Shimazu")
+                 .email("toyohisa@drifters.com")
+                 .roles("USER")
+                 .password("{bcrypt}$2a$10$k9njnRGaefKGhAvVQdW./O9ZG/794jyZbhcMFkALD3xiwKji.Op3i")
+                 .build();
+         var ichigo = User.builder().id(2L)
+                 .firstName("Ichigo")
+                 .lastName("Kurosaki")
+                 .email("ichigo@bleach.com")
+                 .roles("USER")
+                 .password("{bcrypt}$2a$10$k9njnRGaefKGhAvVQdW./O9ZG/794jyZbhcMFkALD3xiwKji.Op3i")
+                 .build();
+         var ash = User.builder()
+                 .id(3L).firstName("Ash")
+                 .lastName("Ketchum")
+                 .email("ash@pokemon.com")
+                 .roles("USER")
+                 .password("{bcrypt}$2a$10$k9njnRGaefKGhAvVQdW./O9ZG/794jyZbhcMFkALD3xiwKji.Op3i")
+                 .build();
  
          return new ArrayList<>(List.of(toyohisa, ichigo, ash));
      }
@@ -22,6 +41,8 @@ import java.util.List;
                  .firstName("Yusuke")
                  .lastName("Urameshi")
                  .email("yusuke@yuyuhakusho.com")
+                 .roles("USER")
+                 .password("{bcrypt}$2a$10$k9njnRGaefKGhAvVQdW./O9ZG/794jyZbhcMFkALD3xiwKji.Op3i")
                  .build();
      }
 
@@ -31,6 +52,8 @@ import java.util.List;
                 .firstName("Yusuke")
                 .lastName("Urameshi")
                 .email("yusuke@yuyuhakusho.com")
+                .roles("USER")
+                .password("{bcrypt}$2a$10$k9njnRGaefKGhAvVQdW./O9ZG/794jyZbhcMFkALD3xiwKji.Op3i")
                 .build();
     }
  }

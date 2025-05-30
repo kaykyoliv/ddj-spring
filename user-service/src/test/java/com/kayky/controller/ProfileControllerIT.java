@@ -2,6 +2,7 @@ package com.kayky.controller;
 
 import com.kayky.commons.FileUtils;
 import com.kayky.config.IntegrationTestConfig;
+import com.kayky.config.TestRestTemplateConfig;
 import com.kayky.response.ProfileGetResponse;
 import com.kayky.response.ProfilePostResponse;
 import net.javacrumbs.jsonunit.assertj.JsonAssertions;
@@ -23,7 +24,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = TestRestTemplateConfig.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ProfileControllerIT extends IntegrationTestConfig {
 
