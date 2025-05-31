@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,7 +31,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @WebMvcTest(controllers = ProducerController.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@ComponentScan(basePackages = {"com.kayky.producer", "com.kayky.commons"})
+@ComponentScan(basePackages = {"com.kayky.producer", "com.kayky.commons", "com.kayky.config"})
+@WithMockUser
 class ProducerControllerTest {
     private static final String URL = "/v1/producers";
     @Autowired
@@ -60,6 +62,16 @@ class ProducerControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").value(1L));
+    }
+
+    @Test
+    @DisplayName("GET v1/producers returns 403 when role is not USER")
+    @Order(1)
+    @WithMockUser(roles = "ADMIN")
+    void findAll_Returns403_WhenRoleIsNotUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(URL))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
