@@ -38,7 +38,7 @@ public class UserController {
     private final UserService service;
     private final UserMapper mapper;
 
-   @PreAuthorize("hasAuthority('ADMIN')")
+
     @GetMapping
     @Operation(summary = "Get all users", description = "Get all users available in the system",
             responses = {
@@ -47,6 +47,7 @@ public class UserController {
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = UserGetResponse.class)))
                     )
             })
+    @PreAuthorize(value = "hasAuthority('ADMIN')")
     public ResponseEntity<List<UserGetResponse>> findAll(@RequestParam(required = false) String firstName) {
         log.debug("Request received to list all users, param first name '{}'", firstName);
 
