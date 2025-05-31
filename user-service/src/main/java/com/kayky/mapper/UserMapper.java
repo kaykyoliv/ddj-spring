@@ -17,8 +17,7 @@ public interface UserMapper {
     @Mapping(target = "roles", constant = "USER")
     @Mapping(target = "password", qualifiedBy = EncodedMapping.class)
     User toUser(UserPostRequest postRequest);
-
-    @Mapping(target = "password", qualifiedBy = EncodedMapping.class)
+    
     User toUser(UserPutRequest request);
 
     UserPostResponse toUserPostResponse(User user);

@@ -2,5 +2,6 @@
   "id": 1,
   "firstName": "Yusuke",
   "lastName": "Urameshi",
-  "email": "yusuke@yuyuhakusho.com"
+  "email": "yusuke@yuyuhakusho.com",
+  "password": "leigan"
 }

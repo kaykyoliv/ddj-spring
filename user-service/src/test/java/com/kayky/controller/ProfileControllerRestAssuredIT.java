@@ -17,16 +17,17 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlMergeMode;
 
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = RestAssuredConfig.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Sql(value = "/sql/user/init_one_login_regular_user.sql")
+@Sql(value = "/sql/user/clean_users.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@SqlMergeMode(value = SqlMergeMode.MergeMode.MERGE )
 class ProfileControllerRestAssuredIT extends IntegrationTestConfig {
 
     private static final String URL = "/v1/profiles";
@@ -36,9 +37,6 @@ class ProfileControllerRestAssuredIT extends IntegrationTestConfig {
 
     @Autowired
     private FileUtils fileUtils;
-
-    @LocalServerPort
-    private int port;
 
     @Autowired
     @Qualifier(value = "requestSpecificationRegularUser")
