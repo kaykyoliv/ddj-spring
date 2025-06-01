@@ -1,5 +1,10 @@
 package com.kayky.producer;
 
+import com.kayky.api.ProducerControllerApi;
+import com.kayky.dto.ProducerGetResponse;
+import com.kayky.dto.ProducerPostRequest;
+import com.kayky.dto.ProducerPostResponse;
+import com.kayky.dto.ProducerPutRequest;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +22,13 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @SecurityRequirement(name = "basicAuth")
-public class ProducerController {
+public class ProducerController implements ProducerControllerApi {
     private final ProducerMapper mapper;
 
     private final ProducerService service;
 
     @GetMapping
-    public ResponseEntity<List<ProducerGetResponse>> findAll(@RequestParam(required = false) String name) {
+    public ResponseEntity<List<ProducerGetResponse>> findAllProducer(@RequestParam(required = false) String name) {
         log.debug("Request received to list all producers, param name '{}'", name);
         var producers = service.findAll(name);
 
@@ -33,7 +38,7 @@ public class ProducerController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ProducerGetResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<ProducerGetResponse> findProducerById(@PathVariable Long id) {
         log.debug("Request to find producer by id: {}", id);
 
         var producer = service.findByIdOrThrowNotFound(id);
@@ -43,10 +48,9 @@ public class ProducerController {
         return ResponseEntity.ok(producerGetResponse);
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE,
-            headers = "x-api-key")
-    public ResponseEntity<ProducerPostResponse> save(@RequestBody @Valid ProducerPostRequest producerPostRequest, @RequestHeader HttpHeaders headers) {
-        log.info("{}", headers);
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProducerPostResponse> saveProducer(@RequestBody @Valid ProducerPostRequest producerPostRequest) {
+
         var producer = mapper.toProducer(producerPostRequest);
 
         var producerSaved = service.save(producer);
@@ -57,7 +61,7 @@ public class ProducerController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProducerById(@PathVariable Long id) {
         log.debug("Request to delete producer by id: {}", id);
 
         service.delete(id);
@@ -66,7 +70,7 @@ public class ProducerController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> update(@RequestBody @Valid ProducerPutRequest request) {
+    public ResponseEntity<Void> updateProducer(@RequestBody @Valid ProducerPutRequest request) {
         log.debug("Request to update producer {}", request);
 
         var producerToUpdate = mapper.toProducer(request);
@@ -75,6 +79,5 @@ public class ProducerController {
 
         return ResponseEntity.noContent().build();
     }
-
 
 }

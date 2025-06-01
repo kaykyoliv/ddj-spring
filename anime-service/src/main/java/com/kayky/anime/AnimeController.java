@@ -1,8 +1,13 @@
 package com.kayky.anime;
 
 
+import com.kayky.api.AnimeControllerApi;
+import com.kayky.dto.*;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
@@ -19,12 +24,12 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @SecurityRequirement(name = "basicAuth")
-public class AnimeController {
+public class AnimeController implements AnimeControllerApi {
     private final AnimeMapper mapper;
     private final AnimeService service;
 
     @GetMapping
-    public ResponseEntity<List<AnimeGetResponse>> listAll(@RequestParam(required = false) String name) {
+    public ResponseEntity<List<AnimeGetResponse>> findAllAnime(@RequestParam(required = false) String name) {
         log.debug("Request received to list all animes, param name '{}'", name);
 
         var animes = service.findAll(name);
@@ -35,15 +40,23 @@ public class AnimeController {
     }
 
     @GetMapping("/paginated")
-    public ResponseEntity<Page<AnimeGetResponse>> findAllPaginated(@ParameterObject Pageable pageable){
+    @Override
+    public ResponseEntity<PageAnimeGetResponse> findAllAnimePaginated(
+            @Min(0) @Parameter(name = "page", description = "Zero-based page index (0..N)", in = ParameterIn.QUERY) @Valid @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+            @Min(1) @Parameter(name = "size", description = "The size of the page to be returned", in = ParameterIn.QUERY) @Valid @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
+            @Parameter(name = "sort", description = "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.", in = ParameterIn.QUERY) @Valid @RequestParam(value = "sort", required = false) List<String> sort,
+            @ParameterObject final Pageable pageable
+    ) {
         log.debug("Request received to list all animes paginated");
 
-        var pageAnimeGetResponse = service.findAllPaginated(pageable).map(mapper::toAnimeGetResponse);
+        var jpaPageAnimeGetResponse = service.findAllPaginated(pageable);
+        var pageAnimeGetResponse = mapper.toPageAnimeGetResponse(jpaPageAnimeGetResponse);
+
         return ResponseEntity.ok(pageAnimeGetResponse);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<AnimeGetResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<AnimeGetResponse> findAnimeById(@PathVariable Long id) {
         log.debug("Request to find anime by id: {}", id);
 
         var anime = service.findByIdOrThrowNotFound(id);
@@ -54,7 +67,7 @@ public class AnimeController {
     }
 
     @PostMapping
-    public ResponseEntity<AnimePostResponse> save(@RequestBody @Valid AnimePostRequest request) {
+    public ResponseEntity<AnimePostResponse> saveAnime(@RequestBody @Valid AnimePostRequest request) {
         log.debug("Request to save anime : {}", request);
         var anime = mapper.toAnime(request);
 
@@ -66,7 +79,7 @@ public class AnimeController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAnimeById(@PathVariable Long id) {
         log.debug("Request to delete anime by id: {}", id);
 
         service.delete(id);
@@ -75,7 +88,7 @@ public class AnimeController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> update(@RequestBody @Valid AnimePutRequest request) {
+    public ResponseEntity<Void> updateAnime(@RequestBody @Valid AnimePutRequest request) {
         log.debug("Request to update anime {}", request);
 
         var animeToUpdate = mapper.toAnime(request);
