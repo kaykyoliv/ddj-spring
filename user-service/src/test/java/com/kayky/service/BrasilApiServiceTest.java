@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kayky.commons.CepUtils;
 import com.kayky.config.BrasilApiConfigurationProperties;
 import com.kayky.config.RestClientConfig;
+import com.kayky.exception.NotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,6 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
 import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.RestClient;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @RestClientTest({BrasilApiService.class,
         RestClientConfig.class,
@@ -64,5 +63,28 @@ class BrasilApiServiceTest {
         Assertions.assertThat(service.findCep(cep))
                 .isNotNull()
                 .isEqualTo(cepGetResponse);
+    }
+
+    @Order(2)
+    @Test
+    @DisplayName("findCep returns CepErrorResponse when unsuccessful")
+    void findCep_ReturnsCepErrorResponse_WhenUnsuccessful() throws JsonProcessingException {
+        server = MockRestServiceServer.bindTo(brasilApiClientBuilder).build();
+
+        var cep = "40400000";
+        var cepErrorResponse = cepUtils.newCepErrorResponse();
+        var jsonResponse = mapper.writeValueAsString(cepErrorResponse);
+        var expectedErrorMessage = """
+                404 NOT_FOUND "CepErrorResponse[name=CepPromiseError, message=Todos os serviços de CEP retornaram erro., type=service_error, errors=[CepInnerErrorResponse[name=ServiceError, message=CEP INVÁLIDO, service=correios]]]"
+                """.trim();
+
+        var requestTo = MockRestRequestMatchers.requestToUriTemplate(properties.baseUrl() + properties.cepUri(), cep);
+        var withSuccess = MockRestResponseCreators.withResourceNotFound().body(jsonResponse);
+        server.expect(requestTo).andRespond(withSuccess);
+
+        Assertions.assertThatException()
+                .isThrownBy(() -> service.findCep(cep))
+                .withMessage(expectedErrorMessage)
+                .isInstanceOf(NotFoundException.class);
     }
 }

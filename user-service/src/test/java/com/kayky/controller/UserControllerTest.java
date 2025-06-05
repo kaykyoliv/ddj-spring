@@ -2,6 +2,7 @@ package com.kayky.controller;
 
 import com.kayky.commons.FileUtils;
 import com.kayky.commons.UserUtils;
+import com.kayky.config.BrasilApiConfigurationProperties;
 import com.kayky.domain.User;
 import com.kayky.repository.ProfileRepository;
 import com.kayky.repository.UserProfileRepository;
@@ -13,6 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
@@ -34,6 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ComponentScan(basePackages = {"com.kayky"})
 @WithMockUser
+@EnableConfigurationProperties(value = BrasilApiConfigurationProperties.class)
 class UserControllerTest {
     private static final String URL = "/v1/users";
     @Autowired
